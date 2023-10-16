@@ -3,10 +3,12 @@ import { pool } from "../db.js";
 
 async function getUsers(req, res) {
   try {
-    const [result] = await pool.query("SELECT * FROM user");
+    const [result] = await pool.query(
+      "SELECT id, avatar_img, nombres, apellidos, rut, username FROM user"
+    );
     res.json(result);
   } catch (error) {
-    return res.status(500).json({message: console.error.message});
+    return res.status(500).json({ message: console.error.message });
   }
 }
 
@@ -17,12 +19,12 @@ async function getoneUser(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({Message: "User not found"});
+      return res.status(404).json({ Message: "User not found" });
     } else {
       res.json(result[0]);
     }
   } catch (error) {
-    return res.status(500).json({message: console.error.message});
+    return res.status(500).json({ message: console.error.message });
   }
 }
 
@@ -60,7 +62,7 @@ async function createUsers(req, res) {
       message: `Usuario creado exitosamente`,
     });
   } catch (error) {
-    return res.status(500).json({message: error.message});
+    return res.status(500).json({ message: error.message });
   }
 }
 
@@ -74,7 +76,7 @@ async function uptadateUsers(req, res) {
       return res.status(404).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
-    return res.status(500).json({message: console.error.message});
+    return res.status(500).json({ message: console.error.message });
   }
 }
 
@@ -86,9 +88,9 @@ async function deleteUsers(req, res) {
     );
     if (result.affectedRows === 0)
       return res.status(404).json({ message: "Usuario no encontrado" });
-    return res.status(204).json({message: "Usuario eliminado exitosamente"});
+    return res.status(204).json({ message: "Usuario eliminado exitosamente" });
   } catch (error) {
-    return res.status(500).json({message: console.error.message});
+    return res.status(500).json({ message: console.error.message });
   }
 }
 
