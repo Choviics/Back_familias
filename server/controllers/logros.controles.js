@@ -3,7 +3,9 @@ import { pool } from "../db.js";
 
 async function getLogros(req, res) {
   try {
-    const [result] = await pool.query("SELECT logro_id, titulo, ruta_imagen, descripcion FROM logros");
+    const [result] = await pool.query(
+      "SELECT logro_id, titulo, ruta_imagen, descripcion FROM logros"
+    );
     res.json(result);
   } catch (error) {
     return res.status(500).json({ message: console.error.message });
@@ -17,14 +19,14 @@ async function getoneLogro(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Logro not found" });    
+      return res.status(404).json({ Message: "Logro not found" });
     } else {
       const [comments] = await pool.query(
-        "SELECT lc.comment_id, lc.contenido, lc.fecha, lc.user_id, u.username, u.avatar_img FROM logros_coments lc LEFT JOIN user u ON lc.user_id = u.id WHERE lc.logro_id = ?",
+        "SELECT lc.*, u.id, u.username, u.avatar_img FROM logros_coments lc JOIN user u ON lc.user_id = u.id WHERE lc.logro_id = ?",
         req.params.id
-      )
-      comments.unshift(result[0])
-      res.json(comments);
+      );
+      result.push(...comments);
+      res.json(result);
     }
   } catch (error) {
     return res.status(500).json({ message: console.error.message });
@@ -64,6 +66,10 @@ async function uptadateLogro(req, res) {
 
 async function deleteLogro(req, res) {
   try {
+    await pool.query(
+      "DELETE FROM logros_coments WHERE logro_id = ?",
+      req.params.id
+    );
     const [result] = await pool.query(
       "DELETE FROM logros WHERE logro_id = ?",
       req.params.id

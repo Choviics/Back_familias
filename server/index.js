@@ -5,6 +5,12 @@ import newsRoutes from "./routes/news.routes.js";
 import convenioRoutes from "./routes/convenios.routes.js";
 import seccionRoutes from "./routes/seccion.routes.js";
 import logrosRoutes from "./routes/logros.routes.js";
+import retoRoutes from "./routes/retos.routes.js";
+import pasosRoutes from "./routes/pasos.routes.js";
+import retoComents from "./routes/retocoments.routes.js";
+import logroscoments from "./routes/logroscoments.routes.js";
+import aventurasRoutes from "./routes/aventuras.routes.js";
+import useraventuras from "./routes/user_aventuras.routes.js";
 
 const app = express();
 
@@ -15,6 +21,12 @@ app.use(newsRoutes);
 app.use(convenioRoutes);
 app.use(seccionRoutes);
 app.use(logrosRoutes);
+app.use(retoRoutes);
+app.use(pasosRoutes);
+app.use(retoComents);
+app.use(logroscoments);
+app.use(aventurasRoutes);
+app.use(useraventuras);
 
 app.listen(PORT);
 console.log(`Server is running on port ${PORT}`);

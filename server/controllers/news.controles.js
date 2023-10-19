@@ -30,10 +30,10 @@ async function getoneNew(req, res) {
 
 async function createNew(req, res) {
   try {
-    const { name, fecha, ruta_imagen, descripcion, created_by } = req.body;
+    const { name, ruta_imagen, descripcion, created_by } = req.body;
     const [result] = await pool.query(
-      "INSERT INTO noticias (name, fecha, ruta_imagen, descripcion, created_by) VALUES (?, ?, ?, ?, ?)",
-      [name, fecha, ruta_imagen, descripcion, created_by]
+      "INSERT INTO noticias (name, fecha, ruta_imagen, descripcion, created_by) VALUES (?, NOW(), ?, ?, ?)",
+      [name, ruta_imagen, descripcion, created_by]
     );
     res.json({
       id: result.insertId,
