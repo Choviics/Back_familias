@@ -8,6 +8,8 @@ router.get("/users/:id", ctrl.getoneUser);
 
 router.post("/users", ctrl.createUsers);
 
+router.post("/users/login", ctrl.login)
+
 router.put("/users/:id", ctrl.uptadateUsers)
 
 router.delete("/users/:id", ctrl.deleteUsers)

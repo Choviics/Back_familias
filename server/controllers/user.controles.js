@@ -94,10 +94,30 @@ async function deleteUsers(req, res) {
   }
 }
 
+async function login(req, res){
+  try{
+    const { username, password } = req.body;
+
+    const [result] = await pool.query(
+      "SELECT * FROM user WHERE username = ? and password = ?",
+      [ username, password]
+    )
+    if (result.length === 0) {
+      return res.status(404).json({ Message: "Credenciales erroneas" });
+    } else {
+      return res.status(200).json({ message: "Inicio de sesión exitoso"});
+    }
+  }
+  catch(error){
+    return res.status(500).json({ message: console.error.message });
+  }
+}
+
 export default {
   getUsers,
   getoneUser,
   createUsers,
   uptadateUsers,
   deleteUsers,
+  login,
 };
