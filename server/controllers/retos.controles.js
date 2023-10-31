@@ -19,7 +19,7 @@ async function getoneReto(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Reto not found" });
+      return res.status(403).json({ Message: "Reto not found" });
     } else {
       const [pasos] = await pool.query(
         "SELECT * FROM pasos WHERE reto_id = ?",
@@ -62,7 +62,7 @@ async function uptadateReto(req, res) {
       req.params.id,
     ]);
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "No se actualizo ningún dato" });
+      return res.status(403).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -82,7 +82,7 @@ async function deleteReto(req, res) {
       req.params.id
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Error al eliminar reto" });
+      return res.status(403).json({ message: "Error al eliminar reto" });
     return res.status(204).json({ message: "Reto eliminado exitosamente" });
   } catch (error) {
     return res.status(500).json({ message: console.error.message });

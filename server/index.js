@@ -1,5 +1,10 @@
 import express from "express";
 import { PORT } from "./config.js";
+import session from "express-session";
+import crypto from "crypto";
+const store = new session.MemoryStore();
+
+//rutas
 import usersRoutes from "./routes/user.routes.js";
 import newsRoutes from "./routes/news.routes.js";
 import convenioRoutes from "./routes/convenios.routes.js";
@@ -13,6 +18,16 @@ import aventurasRoutes from "./routes/aventuras.routes.js";
 import useraventuras from "./routes/user_aventuras.routes.js";
 
 const app = express();
+
+app.use(
+  session({
+    secret: crypto.randomBytes(32).toString("hex"),
+    resave: false,
+    saveUninitialized: true,
+    cookie: { maxAge: 86400000 },
+    store
+  })
+);
 
 app.use(express.json());
 

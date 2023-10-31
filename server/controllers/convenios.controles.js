@@ -17,7 +17,7 @@ async function getoneConvenio(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Convenio not found" });
+      return res.status(403).json({ Message: "Convenio not found" });
     } else {
       res.json(result[0]);
     }
@@ -49,7 +49,7 @@ async function uptadateConvenio(req, res) {
       [req.body, req.params.id]
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "No se actualizo ningún dato" });
+      return res.status(403).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -64,7 +64,7 @@ async function deleteConvenio(req, res) {
       req.params.id
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Convenio no encontrado" });
+      return res.status(403).json({ message: "Convenio no encontrado" });
     return res.status(204).json({ message: "Convenio eliminada exitosamente" });
   } catch (error) {
     return res.status(500).json({ message: console.error.message });
@@ -80,7 +80,7 @@ async function getFilterConv(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Secciones no encontradas" });
+      return res.status(403).json({ Message: "Secciones no encontradas" });
     } else {
       res.json(result);
     }

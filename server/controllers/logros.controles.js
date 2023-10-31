@@ -19,7 +19,7 @@ async function getoneLogro(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Logro not found" });
+      return res.status(403).json({ Message: "Logro not found" });
     } else {
       const [comments] = await pool.query(
         "SELECT lc.*, u.id, u.username, u.avatar_img FROM logros_coments lc JOIN user u ON lc.user_id = u.id WHERE lc.logro_id = ?",
@@ -56,7 +56,7 @@ async function uptadateLogro(req, res) {
       [req.body, req.params.id]
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "No se actualizo ningún dato" });
+      return res.status(403).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -75,7 +75,7 @@ async function deleteLogro(req, res) {
       req.params.id
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Logro no encontrado" });
+      return res.status(403).json({ message: "Logro no encontrado" });
     return res.status(204).json({ message: "Logro eliminado exitosamente" });
   } catch (error) {
     return res.status(500).json({ message: console.error.message });

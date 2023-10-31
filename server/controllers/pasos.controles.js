@@ -8,7 +8,7 @@ async function getonePaso(req, res) {
       req.params.id
     );
     if (result.length === 0) {
-      return res.status(404).json({ Message: "Pasos not found" });
+      return res.status(403).json({ Message: "Pasos not found" });
     } else {
       res.json(result[0]);
     }
@@ -40,7 +40,7 @@ async function uptadatePaso(req, res) {
       req.params.id,
     ]);
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "No se actualizo ningún dato" });
+      return res.status(403).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -55,7 +55,7 @@ async function deletePaso(req, res) {
       req.params.id
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Paso no encontrado" });
+      return res.status(403).json({ message: "Paso no encontrado" });
     return res.status(204).json({ message: "Paso eliminado exitosamente" });
   } catch (error) {
     return res.status(500).json({ message: console.error.message });

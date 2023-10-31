@@ -24,7 +24,7 @@ async function uptadateRetoComent(req, res) {
       [req.body, req.params.id]
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "No se actualizo ningún dato" });
+      return res.status(403).json({ message: "No se actualizo ningún dato" });
     res.json(result);
   } catch (error) {
     console.log(error);
@@ -39,7 +39,7 @@ async function deleteRetoComent(req, res) {
       req.params.id
     );
     if (result.affectedRows === 0)
-      return res.status(404).json({ message: "Comentario no encontrado" });
+      return res.status(403).json({ message: "Comentario no encontrado" });
     return res
       .status(204)
       .json({ message: "Comentario eliminado exitosamente" });
