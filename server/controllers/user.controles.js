@@ -4,12 +4,12 @@ import bcrypt from "bcrypt";
 
 async function getUsers(req, res) {
   try {
-    if(req.session.user.es_admin){
+    if (req.session.user.es_admin) {
       const [result] = await pool.query(
         "SELECT id, avatar_img, nombres, apellidos, rut, username FROM user"
       );
-      res.json(result);
-    }else{
+      return res.json(result);
+    } else {
       return res.status(404).json({ message: "No tienes permisos" });
     }
   } catch (error) {
@@ -19,7 +19,7 @@ async function getUsers(req, res) {
 
 async function getoneUser(req, res) {
   try {
-    if(req.session.user.es_admin){
+    if (req.session.user.es_admin) {
       const [result] = await pool.query(
         "SELECT * FROM user WHERE id = ?",
         req.params.id
@@ -29,7 +29,7 @@ async function getoneUser(req, res) {
       } else {
         res.json(result[0]);
       }
-    }else{
+    } else {
       return res.status(404).json({ message: "No tienes permisos" });
     }
   } catch (error) {
@@ -39,7 +39,7 @@ async function getoneUser(req, res) {
 
 async function createUsers(req, res) {
   try {
-    if(req.session.user.es_admin){
+    if (req.session.user.es_admin) {
       const {
         nombres,
         apellidos,
@@ -75,9 +75,9 @@ async function createUsers(req, res) {
         id: result.insertId,
         message: `Usuario creado exitosamente`,
       });
-  }else{
-    return res.status(404).json({ message: "No tienes permisos" });
-  }
+    } else {
+      return res.status(404).json({ message: "No tienes permisos" });
+    }
   } catch (error) {
     return res.status(500).json({ message: error.message });
   }
@@ -85,7 +85,10 @@ async function createUsers(req, res) {
 
 async function uptadateUsers(req, res) {
   try {
-    if (req.session.user.es_admin || req.params.id == req.session.user.user_id) {
+    if (
+      req.session.user.es_admin ||
+      req.params.id == req.session.user.user_id
+    ) {
       const [result] = await pool.query("UPDATE user SET ? WHERE id = ?", [
         req.body,
         req.params.id,

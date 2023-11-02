@@ -2,14 +2,14 @@ import { Router } from "express";
 const router = Router();
 import ctrl from "../controllers/logros.controles.js";
 
-router.get("/cha", ctrl.getLogros);
+router.get("/ach", ctrl.getLogros);
 
-router.get("/cha/:id", ctrl.getoneLogro);
+router.get("/ach/:id", ctrl.getoneLogro);
 
-router.post("/cha", ctrl.createLogro);
+router.post("/ach", ctrl.createLogro);
 
-router.put("/cha/:id", ctrl.uptadateLogro);
+router.put("/ach/:id", ctrl.uptadateLogro);
 
-router.delete("/cha/:id", ctrl.deleteLogro);
+router.delete("/ach/:id", ctrl.deleteLogro);
 
 export default router;
