@@ -2,6 +2,7 @@ import express from "express";
 import { PORT } from "./config.js";
 import session from "express-session";
 import crypto from "crypto";
+import cors from "cors"
 const store = new session.MemoryStore();
 
 //rutas
@@ -30,6 +31,7 @@ app.use(
 );
 
 app.use(express.json());
+app.use(cors({origin:true}))
 
 app.use(usersRoutes);
 app.use(newsRoutes);
