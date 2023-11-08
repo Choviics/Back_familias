@@ -151,6 +151,7 @@ async function login(req, res) {
           user_id,
           username,
           es_admin,
+          avatar_img
         };
         return res.json(req.session);
       } else {
