@@ -147,11 +147,12 @@ async function login(req, res) {
         req.session.authenticated = true;
         const user_id = result[0].id;
         const es_admin = result[0].es_admin;
+        const avatar_img = result[0].avatar_img;
         req.session.user = {
           user_id,
           username,
           es_admin,
-          avatar_img
+          avatar_img,
         };
         return res.json(req.session);
       } else {
