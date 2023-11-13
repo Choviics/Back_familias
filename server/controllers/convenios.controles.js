@@ -4,7 +4,7 @@ import { pool } from "../db.js";
 async function getConvenios(req, res) {
   try {
     if (req.session.authenticated) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT name, seccion, ruta_logo, descripcion FROM convenio"
       );
       res.json(result);
@@ -17,7 +17,7 @@ async function getConvenios(req, res) {
 async function getoneConvenio(req, res) {
   try {
     if (req.session.authenticated) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT * FROM convenio WHERE convenio_id = ?",
         req.params.id
       );
@@ -36,7 +36,7 @@ async function createConvenio(req, res) {
   try {
     if (req.session.user.es_admin) {
       const { name, seccion, ruta_logo, descripcion } = req.body;
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "INSERT INTO convenio (name, seccion, created_by, ruta_logo, descripcion) VALUES (?, ?, ?, ?, ?)",
         [name, seccion, req.session.user.user_id, ruta_logo, descripcion]
       );
@@ -53,7 +53,7 @@ async function createConvenio(req, res) {
 async function uptadateConvenio(req, res) {
   try {
     if (req.session.user.es_admin) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "UPDATE convenio SET ? WHERE convenio_id = ?",
         [req.body, req.params.id]
       );
@@ -70,7 +70,7 @@ async function uptadateConvenio(req, res) {
 async function deleteConvenio(req, res) {
   try {
     if (req.session.user.es_admin) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "DELETE FROM convenio WHERE convenio_id = ?",
         req.params.id
       );
@@ -90,7 +90,7 @@ async function deleteConvenio(req, res) {
 async function getFilterConv(req, res) {
   try {
     if (req.session.authenticated) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT * FROM convenio WHERE seccion = ?",
         req.params.id
       );

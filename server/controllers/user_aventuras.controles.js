@@ -4,7 +4,7 @@ import { pool } from "../db.js";
 async function getUsersAventura(req, res) {
   try {
     if(req.session.authenticated){
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         `
       SELECT ua.*, u.username, u.avatar_img
       FROM user_aventura ua
@@ -26,7 +26,7 @@ async function getUsersAventura(req, res) {
 async function createUserAventura(req, res) {
   try {
     if(req.session.authenticated){
-      const [existe] = await pool.query(
+      const [existe] = await pool.promise().query(
         `
       SELECT *
       FROM user_aventura
@@ -37,7 +37,7 @@ async function createUserAventura(req, res) {
       if (existe.length > 0) {
         return res.json({ message: "Usuario ya se encuentra en la aventura" });
       } else {
-        const [result] = await pool.query(
+        const [result] = await pool.promise().query(
           "INSERT INTO user_aventura (user_id, aventura_id) VALUES (?, ?)",
           [req.session.user.user_id, req.params.aventura_id]
         );
@@ -55,7 +55,7 @@ async function createUserAventura(req, res) {
 async function deleteUserAventura(req, res) {
   try {
     if(req.session.authenticated){
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "DELETE FROM user_aventura WHERE user_id = ? AND aventura_id = ?",
         [req.session.user.user_id, req.params.aventura_id]
       );

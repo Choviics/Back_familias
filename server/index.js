@@ -4,7 +4,6 @@ import session from "express-session";
 import crypto from "crypto";
 import cors from "cors"
 const store = new session.MemoryStore();
-
 //rutas
 import usersRoutes from "./routes/user.routes.js";
 import newsRoutes from "./routes/news.routes.js";
@@ -17,6 +16,11 @@ import retoComents from "./routes/retocoments.routes.js";
 import logroscoments from "./routes/logroscoments.routes.js";
 import aventurasRoutes from "./routes/aventuras.routes.js";
 import useraventuras from "./routes/user_aventuras.routes.js";
+
+//https
+import fs from 'fs';
+import https from 'https'
+
 
 const app = express();
 
@@ -32,7 +36,6 @@ app.use(
 
 app.use(express.json());
 app.use(cors({origin:true}))
-
 app.use(usersRoutes);
 app.use(newsRoutes);
 app.use(convenioRoutes);
@@ -45,5 +48,9 @@ app.use(logroscoments);
 app.use(aventurasRoutes);
 app.use(useraventuras);
 
-app.listen(PORT);
-console.log(`Server is running on port ${PORT}`);
+https.createServer({
+  cert: fs.readFileSync('cert.pem'),
+  key: fs.readFileSync('privkey.pem')
+}, app).listen(PORT, function(){
+  console.log(`Server is running on port ${PORT}`);
+});

@@ -4,7 +4,7 @@ import { pool } from "../db.js";
 async function getAventuras(req, res) {
   try {
     if (req.session.authenticated) {
-      const [result] = await pool.query(`
+      const [result] = await pool.promise().query(`
       SELECT
       a.aventura_id, a.titulo, a.ruta_imagen, a.fecha, maximo,
       (SELECT COUNT(*) FROM user_aventura ua WHERE ua.aventura_id = a.aventura_id) AS participantes
@@ -19,7 +19,7 @@ async function getAventuras(req, res) {
 async function getoneAventura(req, res) {
   try {
     if (req.session.authenticated) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         `
       SELECT
       a.*,
@@ -50,7 +50,7 @@ async function createAventura(req, res) {
         descripcion,
         direccion,
       } = req.body;
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "INSERT INTO aventuras (titulo, ruta_imagen, created_by, maximo, fecha, descripcion, direccion) VALUES (?, ?, ?, ?, ?, ?, ?)",
         [titulo, ruta_imagen, req.session.user.user_id, maximo, fecha, descripcion, direccion]
       );
@@ -66,7 +66,7 @@ async function createAventura(req, res) {
 
 async function uptadateAventura(req, res) {
   try {
-    const [post] = await pool.query(
+    const [post] = await pool.promise().query(
       "SELECT created_by FROM aventuras WHERE aventura_id = ?",
       [req.params.id]
     );
@@ -74,7 +74,7 @@ async function uptadateAventura(req, res) {
       req.session.user.user_id == post[0].created_by ||
       req.session.user.es_admin
     ) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "UPDATE aventuras SET ? WHERE aventura_id = ?",
         [req.body, req.params.id]
       );
@@ -90,7 +90,7 @@ async function uptadateAventura(req, res) {
 
 async function deleteAventura(req, res) {
   try {
-    const [post] = await pool.query(
+    const [post] = await pool.promise().query(
       "SELECT created_by FROM aventuras WHERE aventura_id = ?",
       [req.params.id]
     );
@@ -98,11 +98,11 @@ async function deleteAventura(req, res) {
       req.session.user.user_id == post[0].created_by ||
       req.session.user.es_admin
     ) {
-      await pool.query(
+      await pool.promise().query(
         "DELETE FROM user_aventura WHERE aventura_id = ?",
         req.params.id
       );
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "DELETE FROM aventuras WHERE aventura_id = ?",
         req.params.id
       );

@@ -5,7 +5,7 @@ async function createRetoComent(req, res) {
   try {
     if (req.session.authenticated) {
       const { contenido } = req.body;
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "INSERT INTO reto_coments (reto_id, user_id, contenido, fecha) VALUES (?, ?, ?, NOW())",
         [req.params.aventura_id, req.session.user.user_id, contenido]
       );
@@ -21,7 +21,7 @@ async function createRetoComent(req, res) {
 
 async function uptadateRetoComent(req, res) {
   try {
-    const [post] = await pool.query(
+    const [post] = await pool.promise().query(
       "SELECT user_id FROM reto_coments WHERE coment_id = ?",
       [req.params.id]
     );
@@ -29,7 +29,7 @@ async function uptadateRetoComent(req, res) {
       req.session.user.user_id == post[0].user_id ||
       req.session.user.es_admin
     ) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "UPDATE reto_coments SET ? WHERE coment_id = ?",
         [req.body, req.params.id]
       );
@@ -45,7 +45,7 @@ async function uptadateRetoComent(req, res) {
 
 async function deleteRetoComent(req, res) {
   try {
-    const [post] = await pool.query(
+    const [post] = await pool.promise().query(
       "SELECT user_id FROM reto_coments WHERE coment_id = ?",
       [req.params.id]
     );
@@ -53,7 +53,7 @@ async function deleteRetoComent(req, res) {
       req.session.user.user_id == post[0].user_id ||
       req.session.user.es_admin
     ) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "DELETE FROM reto_coments WHERE coment_id = ?",
         req.params.id
       );

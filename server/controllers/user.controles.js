@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 async function getUsers(req, res) {
   try {
     if (req.session.user.es_admin) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT id, avatar_img, nombres, apellidos, rut, username FROM user"
       );
       return res.json(result);
@@ -20,7 +20,7 @@ async function getUsers(req, res) {
 async function getoneUser(req, res) {
   try {
     if (req.session.user.es_admin) {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT * FROM user WHERE id = ?",
         req.params.id
       );
@@ -56,7 +56,7 @@ async function createUsers(req, res) {
       const salt = await bcrypt.genSalt(10);
       const hash = bcrypt.hashSync(password, salt);
 
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "INSERT INTO user (nombres, apellidos, rut, username, email, password, es_admin, direccion, telefono, avatar_img) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)",
         [
           nombres,
@@ -89,7 +89,7 @@ async function uptadateUsers(req, res) {
       req.session.user.es_admin ||
       req.params.id == req.session.user.user_id
     ) {
-      const [result] = await pool.query("UPDATE user SET ? WHERE id = ?", [
+      const [result] = await pool.promise().query("UPDATE user SET ? WHERE id = ?", [
         req.body,
         req.params.id,
       ]);
@@ -112,7 +112,7 @@ async function deleteUsers(req, res) {
           .status(403)
           .json({ message: "No puedes eliminarte a ti mismo" });
       }
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "DELETE FROM user WHERE id = ?",
         req.params.id
       );
@@ -132,17 +132,14 @@ async function deleteUsers(req, res) {
 async function login(req, res) {
   try {
     const { username, password } = req.body;
-
     if (req.session.authenticated) {
       res.json(req.session);
     } else {
-      const [result] = await pool.query(
+      const [result] = await pool.promise().query(
         "SELECT * FROM user WHERE username = ?",
         [username]
       );
-
       const auth = bcrypt.compareSync(password, result[0].password);
-
       if (auth) {
         req.session.authenticated = true;
         const user_id = result[0].id;
